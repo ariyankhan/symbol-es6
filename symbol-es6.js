@@ -38,6 +38,8 @@
 
     var ES6 = typeof global.ES6 === "object" ? global.ES6 : (global.ES6 = {});
 
+    var isTestMode = global.symbolES6TestingMode || false;
+    
     var isArray = Array.isArray;
 
     var objectToString = Object.prototype.toString;
@@ -73,7 +75,19 @@
     };
 
     var isES6Running = function() {
-        return false; /* Now 'false' for testing purpose */
+        if (isTestMode)
+            return false;
+        
+        var isSymbolSupported = false;
+        if (typeof Symbol === "function") {
+            try {
+                Symbol();
+                isSymbolSupported = true;
+            } catch (ignore) {}
+        } else {
+            isSymbolSupported = false;
+        }
+        return isSymbolSupported; /* Now 'false' for testing purpose */
     };
 
     var isObject = function (value) {
